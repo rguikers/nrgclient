@@ -1,0 +1,9 @@
+{
+  "domain": "nrg_client",
+  "name": "NRG Client",
+  "documentation": "",
+  "dependencies": [],
+  "codeowners": [],
+  "requirements": ["azure-iot-device"],
+  "version": "1.0"
+}

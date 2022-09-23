@@ -1,0 +1,53 @@
+default_config:
+
+logger:
+  default: info
+  logs:
+    custom_components.nrg_client: debug
+
+# If you need to debug uncomment the line below (doc: https://www.home-assistant.io/integrations/debugpy/)
+# debugpy:
+
+nrg_client:
+  connectstring: <connectstring>
+  interval: 120
+  log_level: 0
+  solar:
+    telemetry:
+      solar_yield: sensor.processor_use
+    spec:
+      solar_spec_capacity_per_panel: 330
+      solar_spec_panel_amount: 12
+      solar_spec_panel_area: 24
+      solar_spec_panel_azimuth: 161
+      solar_spec_panel_tilt: 45
+  battery:
+    telemetry:
+      battery_current_charge_rate: sensor.processor_use
+      battery_current_discharge_rate: sensor.memory_free
+      battery_charge_level: sensor.memory_freed
+    spec:
+      battery_spec_size: 13
+      battery_spec_efficiency: 0.9
+      battery_spec_discharge_rate: 4
+      battery_spec_charge_rate: 4
+  smartmeter:
+    telemetry:
+      smartmeter_total_feedout: dsmr_
+      smartmeter_total_feedin: dsmr_
+      smartmeter_current_feedout: dsmr_
+      smartmetercurrentl_feedin: dsmr_
+      smartmeter_total_gas_consumption: dsmr_
+      smartmeter_current_gas_consumption: dsmr_
+    spec:
+      smartmeter_spec_type: whatever
+      smartmeter_spec_version: 5
+  thermostat:
+    telemetry:
+      thermostat_temperature: nest_
+      thermostat_setpoint_temp: nest_
+sensor:
+  - platform: systemmonitor
+    resources:
+      - type: memory_free
+      - type: processor_use
