@@ -62,7 +62,7 @@ CONF_SMARTMETER_SPEC_VERSION = "smartmeter_spec_version"
 CONF_THERMOSTAT = "thermostat"
 CONF_THERMOSTAT_TEMPERATURE = "thermostat_temperature"
 CONF_THERMOSTAT_SETPOINT_TEMP = "thermostat_setpoint_temp"
-# client = {}
+client = {}
 
 # Kolla scripts.py
 CONFIG_SCHEMA = vol.Schema(
@@ -169,14 +169,15 @@ async def async_setup(hass, config):
 
     async def nrg_client_init(config):
 
+        global client
         conn = config[DOMAIN].get(CONF_CONNECTSTRING)
         # _LOGGER.info("Device connection using connection string {}".format(conn))
-        device_client = IoTHubDeviceClient.create_from_connection_string(conn)
+        client = IoTHubDeviceClient.create_from_connection_string(conn)
         # Connect the client.
-        # client = await device_client.connect()
-        return device_client
+        await client.connect()
 
-    async def _push_specs(client):
+    async def _push_specs():
+        global client
         _LOGGER.debug("Pushing specs")
         if CONF_BATTERY in config[DOMAIN]:
             if CONF_SPEC in config[DOMAIN][CONF_BATTERY]:
@@ -238,8 +239,7 @@ async def async_setup(hass, config):
     async def _push_telemetry(now):
         # push telemetry
         # connect client
-
-        client = await nrg_client_init(config)
+        global client
         _LOGGER.debug("Pushing telemetry")
 
         # battery
@@ -354,12 +354,12 @@ async def async_setup(hass, config):
             await client.send_message(patch)
 
         # disconnect client
-        await client.disconnect()
+        # await client.disconnect()
 
     # # Initialize devices
     client = await nrg_client_init(config)
-    await _push_specs(client)
-    await client.disconnect()
+    await _push_specs()
+    # await client.disconnect()
     async_track_time_interval(
         hass, _push_telemetry, timedelta(seconds=config[DOMAIN][CONF_INTERVAL])
     )
