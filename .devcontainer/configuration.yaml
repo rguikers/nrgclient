@@ -15,6 +15,7 @@ nrg_client:
   solar:
     telemetry:
       solar_yield: sensor.processor_use
+      solar_current_yield: sensor.processor_use
     spec:
       solar_spec_capacity_per_panel: 330
       solar_spec_panel_amount: 12

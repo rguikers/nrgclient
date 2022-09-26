@@ -34,6 +34,7 @@ CONF_SPEC = "spec"
 
 CONF_SOLAR = "solar"
 CONF_SOLAR_YIELD = "solar_yield"
+CONF_SOLAR_CURRENT_YIELD = "solar_current_yield"
 CONF_SOLAR_STATE = "solar_state"
 CONF_SOLAR_SPEC_CAPACITY_PER_PANEL = "solar_spec_capacity_per_panel"
 CONF_SOLAR_SPEC_PANEL_AMOUNT = "solar_spec_panel_amount"
@@ -77,6 +78,7 @@ CONFIG_SCHEMA = vol.Schema(
                         CONF_TELEMETRY: vol.Schema(
                             {
                                 vol.Optional(CONF_SOLAR_YIELD): cv.string,
+                                vol.Optional(CONF_SOLAR_CURRENT_YIELD): cv.string,
                             }
                         ),
                         CONF_SPEC: vol.Schema(
@@ -276,6 +278,11 @@ async def async_setup(hass, config):
                 solar_msg,
                 "yield",
                 config[DOMAIN][CONF_SOLAR][CONF_TELEMETRY][CONF_SOLAR_YIELD],
+            )
+            await _add_sensor_state(
+                solar_msg,
+                "currentYield",
+                config[DOMAIN][CONF_SOLAR][CONF_TELEMETRY][CONF_SOLAR_CURRENT_YIELD],
             )
             patch = create_telemetry(
                 solar_msg,
