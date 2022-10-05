@@ -236,7 +236,7 @@ async def async_setup(hass, config):
     async def _add_sensor_state(msg, element, sensor):
         sensor_state = hass.states.get(sensor)
         if sensor_state:
-            msg[element] = sensor_state.state
+            msg[element] = float(sensor_state.state)
 
     async def _push_telemetry(now):
         # push telemetry
